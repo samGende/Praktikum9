@@ -2,11 +2,14 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Graph {
     private Node[] nodes;
     private int numNodes;
     private int numEdges;
+
 
     public Graph(){
         this.nodes = new Node[100];
@@ -15,6 +18,7 @@ public class Graph {
     }
 
     public static Graph fromFile(String filepath){
+        Graph graph = new Graph();
         BufferedReader bufferedReader = null;
         try {
             FileReader fileReader = new FileReader(filepath);
@@ -22,20 +26,73 @@ public class Graph {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        String p = "";
-        do while (p.ge)
+        String line = "";
         try {
-            p = bufferedReader.readLine();
+            line = bufferedReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int numNodes = Integer.parseInt(p);
-        int numEdges = Integer.parseInt(p);
-        System.out.println(numNodes);
-        System.out.println(numEdges);
+        while (line != null) {
+            int numNodes;
+            int numEdges;
+            int nodeOne;
+            int nodeTwo;
+            Scanner scan = new Scanner(line);
+                if (line.charAt(0) == 'p') {
+                    while (scan.hasNext()) {
+                        if (scan.hasNextInt()) {
+                            numNodes = scan.nextInt();
+                            numEdges = scan.nextInt();
+                            for(int i = 0; i < numNodes; i++){
+                                graph.addNode(i);
+                            }
+                        } else {
+                            scan.next();
+                        }
+                    }
+                } else if(line.charAt(0) == 'e') {
+                    while (scan.hasNext()) {
+                        if (scan.hasNextInt()) {
+                            nodeOne = scan.nextInt();
+                            nodeTwo = scan.nextInt();
+                            graph.addEdge(nodeOne, nodeTwo);
+                        } else {
+                            scan.next();
+                        }
+                    }
+                }
+                try {
+                    line = bufferedReader.readLine();
 
-        return new Graph();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+        }
+
+
+        return graph;
+
+    }
+
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < numNodes; i++){
+            stringBuilder.append("Knoten" + i + " verbunden zu: ");
+            LinkedList<Edge> edges = nodes[i].getEdges();
+            for(Edge edge: edges){
+                stringBuilder.append(edge.getDst().getId() +" ");
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public void addNode(int id){
+        if(id == numNodes){
+            nodes[id] = new Node(id);
+        }
+        numNodes++;
     }
 
     public boolean addEdge(int src, int dst){

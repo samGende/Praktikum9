@@ -1,7 +1,13 @@
+import sun.awt.image.ImageWatched;
+
+import java.util.LinkedList;
+
 public class Node {
     private int id;
+    private LinkedList<Edge> edges;
     public Node(int id){
         this.id = id;
+        edges = new LinkedList<Edge>();
     }
 
     public int getId() {
@@ -13,6 +19,12 @@ public class Node {
     }
 
     public Edge addEdge(Node dst){
-        return new Edge(this, dst);
+        Edge edge = new Edge(this, dst);
+        edges.add(edge);
+        return edge;
+    }
+
+    public LinkedList<Edge> getEdges(){
+        return edges;
     }
 }

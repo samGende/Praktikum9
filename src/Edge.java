@@ -6,4 +6,12 @@ public class Edge {
         this.src = src;
         this.dst = dst;
     }
+
+    public Node getSrc() {
+        return src;
+    }
+
+    public Node getDst() {
+        return dst;
+    }
 }
