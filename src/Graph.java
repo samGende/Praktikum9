@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Graph {
@@ -89,6 +90,13 @@ public class Graph {
     }
 
     public void addNode(int id){
+        if(id > nodes.length){
+            Node[] larger = new Node[nodes.length*2];
+            for(int i = 0; i < nodes.length; i++){
+                larger[i] = nodes[i];
+            }
+            nodes = larger;
+        }
         if(id == numNodes){
             nodes[id] = new Node(id);
         }
@@ -130,5 +138,32 @@ public class Graph {
 
     public int getNumEdges() {
         return numEdges;
+    }
+
+    public int breitenSuche(int s, int t){
+        int[] distances = new int[numNodes];
+        for (int i = 0; i < distances.length; i++) {
+            distances[i] = Integer.MAX_VALUE;
+        }
+        distances[s] = 0;
+        LinkedList<Node> queue = new LinkedList<>();
+        queue.addLast(getNode(s));
+        Node current;
+        while (!queue.isEmpty()){
+           current = queue.removeFirst();
+           // wenn ziel ist gib distance von ziel zuruck
+           if(current.getId() == t){
+               return distances[t];
+           }
+           LinkedList<Edge> edges = current.getEdges();
+           //fuge die knoten mit denn current verbunden ins queue ein
+           for(Edge edge: edges){
+               if(distances[edge.getDst().getId()] == Integer.MAX_VALUE) {
+                   queue.addLast(edge.getDst());
+                   //pass distance von die knoten ein
+                   distances[edge.getDst().getId()] = distances[current.getId()]+1;}
+           }
+        }
+        return distances[t];
     }
 }
