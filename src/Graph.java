@@ -28,15 +28,18 @@ public class Graph {
         }
         String line = "";
         try {
+            //file reader liest ein linie ein
             line = bufferedReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // geht durch alle linien denn file
         while (line != null) {
-            int numNodes;
-            int numEdges;
+            int numNodes = 0 ;
+            int numEdges =0;
             int nodeOne;
             int nodeTwo;
+            // scanner wird genutzt um durch die linie zu lesen
             Scanner scan = new Scanner(line);
                 if (line.charAt(0) == 'p') {
                     while (scan.hasNext()) {
@@ -76,6 +79,7 @@ public class Graph {
     }
 
     public String toString(){
+        //String builder nutzen um string zu bauen
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < numNodes; i++){
             stringBuilder.append("Knoten" + i + " verbunden zu: ");
@@ -89,6 +93,7 @@ public class Graph {
     }
 
     public void addNode(int id){
+        // checken ob id gultig ist
         if(id > nodes.length){
             Node[] larger = new Node[nodes.length*2];
             for(int i = 0; i < nodes.length; i++){
@@ -105,6 +110,7 @@ public class Graph {
     public boolean addEdge(int src, int dst){
         Node srcNode = getNode(src);
         Node dstNode = getNode(dst);
+        // schauen ob node da ist
         if(srcNode==null || dstNode == null){
             return false;
         }
@@ -113,6 +119,7 @@ public class Graph {
     }
 
     public Node getNode(int id){
+        // ist node id gultig
         if(id >= numNodes || numNodes == 0){
             return null;
         }
